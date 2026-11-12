@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foodie Hub | Order Delicious Food</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#090909;color:white;font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:99;background:#080808;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #ed1717}
+.logo{font-size:25px;font-weight:900;color:white}
+.logo span{color:#ff2424}
+nav a{color:white;text-decoration:none;margin:0 10px;font-size:14px}
+nav a:hover{color:red}
+.hero{min-height:520px;padding:100px 8%;display:flex;align-items:center;background:linear-gradient(90deg,#090909 10%,#090909bb 55%,transparent),url('https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=1400') center/cover}
+.hero h1{font-size:clamp(42px,7vw,75px);max-width:650px;line-height:1.1}
+.hero h1 span{color:#ff2929}
+.hero p{margin:20px 0;color:#ddd;line-height:1.7}
+.btn{border:0;background:#f11;color:white;padding:14px 23px;border-radius:30px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{background:#b90000;transform:scale(1.04)}
+section{padding:65px 6%}
+.heading{text-align:center;font-size:34px;margin-bottom:35px}
+.heading span{color:#ff2929}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:22px}
+.food{background:#151515;border:1px solid #3a2222;border-radius:15px;overflow:hidden;transition:.3s}
+.food:hover{transform:translateY(-7px);border-color:red;box-shadow:0 0 20px #ff222233}
+.food img{width:100%;height:170px;object-fit:cover}
+.food-info{padding:17px}
+.food h3{font-size:20px;margin-bottom:8px}
+.food p{color:#aaa;font-size:13px;line-height:1.5}
+.price{color:#ffcf00;font-size:22px;font-weight:bold;margin:14px 0}
+.food button{width:100%}
+.cart-section{background:#151515}
+.cart{max-width:750px;margin:auto;background:#090909;padding:25px;border-radius:15px;border:1px solid #472020}
+.cart-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 0;border-bottom:1px solid #333}
+.cart-item button{padding:5px 10px;background:#e11;color:white;border:0;border-radius:5px}
+.total{font-size:25px;color:#ffcf00;margin-top:20px}
+.checkout{max-width:650px;margin:35px auto 0;background:#151515;padding:25px;border-radius:15px}
+.checkout input,.checkout textarea{width:100%;padding:14px;margin:9px 0;background:#090909;border:1px solid #444;color:white;border-radius:8px}
+.checkout textarea{height:90px}
+.checkout button{width:100%;margin-top:10px}
+.about{background:#111;text-align:center}
+.about p{max-width:650px;margin:auto;color:#bbb;line-height:1.8}
+footer{text-align:center;padding:30px;background:#050505;color:#aaa;border-top:2px solid red}
+@media(max-width:600px){
+header{flex-wrap:wrap;gap:12px}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{margin:0;font-size:12px}
+.hero{padding:75px 6%;background-position:center}
+section{padding:50px 5%}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">🍔 FOODIE <span>HUB</span></div>
+<nav>
+<a href="#home">Home</a>
+<a href="#menu">Menu</a>
+<a href="#about">About</a>
+<a href="#cart">Cart 🛒 <b id="count">0</b></a>
+</nav>
+</header>
+
+<section class="hero" id="home">
+<div>
+<h1>DELICIOUS FOOD,<br><span>GREAT MOOD!</span></h1>
+<p>Fresh ingredients. Amazing taste. Always satisfying.<br>
+Your favorite food is just one click away!</p>
+<a href="#menu" class="btn">ORDER NOW →</a>
+</div>
+</section>
+
+<section id="menu">
+<h2 class="heading">OUR <span>POPULAR MENU</span></h2>
+<div class="menu" id="foodMenu"></div>
+</section>
+
+<section class="cart-section" id="cart">
+<h2 class="heading">YOUR <span>SHOPPING CART</span></h2>
+<div class="cart">
+<div id="cartItems">Your cart is empty.</div>
+<div class="total">Total: ₱<span id="total">0</span></div>
+<button class="btn" onclick="document.getElementById('checkout').scrollIntoView()">PROCEED TO CHECKOUT</button>
+</div>
+
+<div class="checkout" id="checkout">
+<h2>Customer Information</h2>
+<form id="orderForm">
+<input id="customer" placeholder="Your full name" required>
+<input id="phone" type="tel" placeholder="Your phone number" required>
+<textarea id="address" placeholder="Delivery address" required></textarea>
+<textarea id="notes" placeholder="Additional notes (optional)"></textarea>
+<button class="btn" type="submit">PLACE ORDER</button>
+</form>
+</div>
+</section>
+
+<section class="about" id="about">
+<h2 class="heading">ABOUT <span>FOODIE HUB</span></h2>
+<p>Foodie Hub is all about delicious food and great experiences.
+We believe every meal should bring happiness.
+Thank you for visiting our food shop!</p>
+</section>
+
+<footer>
+<h2>🍔 FOODIE HUB</h2>
+<p>Good Food. Good Vibes.</p>
+<p>© 2026 Foodie Hub. All rights reserved.</p>
+</footer>
+
+<script>
+const foods=[
+{name:"Classic Burger",price:149,desc:"Juicy burger with cheese and fresh vegetables.",img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500"},
+{name:"Pepperoni Pizza",price:199,desc:"Cheesy pizza with delicious pepperoni.",img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500"},
+{name:"Fried Chicken",price:149,desc:"Crispy golden chicken, freshly cooked.",img:"https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500"},
+{name:"Spaghetti",price:129,desc:"Delicious pasta with rich tomato sauce.",img:"https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?w=500"},
+{name:"French Fries",price:79,desc:"Golden crispy fries with seasoning.",img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500"},
+{name:"Halo-Halo",price:99,desc:"Refreshing Filipino dessert with toppings.",img:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500"}
+];
+
+let cart=[];
+
+function renderMenu(){
+document.getElementById("foodMenu").innerHTML=foods.map((f,i)=>`
+<div class="food">
+<img src="${f.img}" alt="${f.name}">
+<div class="food-info">
+<h3>${f.name}</h3>
+<p>${f.desc}</p>
+<div class="price">₱${f.price}</div>
+<button class="btn" onclick="addToCart(${i})">🛒 ADD TO CART</button>
+</div>
+</div>`).join("");
+}
+
+function addToCart(i){
+let item=cart.find(x=>x.name===foods[i].name);
+if(item)item.qty++;
+else cart.push({...foods[i],qty:1});
+renderCart();
+}
+
+function changeQty(i,amount){
+cart[i].qty+=amount;
+if(cart[i].qty<=0)cart.splice(i,1);
+renderCart();
+}
+
+function renderCart(){
+document.getElementById("count").textContent=cart.reduce((s,x)=>s+x.qty,0);
+document.getElementById("total").textContent=cart.reduce((s,x)=>s+x.price*x.qty,0);
+document.getElementById("cartItems").innerHTML=cart.length?
+cart.map((x,i)=>`
+<div class="cart-item">
+<div><b>${x.name}</b><br>₱${x.price} × ${x.qty}</div>
+<div>
+<button onclick="changeQty(${i},-1)">−</button>
+<button onclick="changeQty(${i},1)">+</button>
+</div>
+</div>`).join(""):"Your cart is empty.";
+}
+
+document.getElementById("orderForm").addEventListener("submit",function(e){
+e.preventDefault();
+if(!cart.length){
+alert("Please add food to your cart first!");
+return;
+}
+
+let name=document.getElementById("customer").value;
+let phone=document.getElementById("phone").value;
+let address=document.getElementById("address").value;
+let notes=document.getElementById("notes").value;
+
+let items=cart.map(x=>`${x.name} x ${x.qty} = ₱${x.price*x.qty}`).join("\n");
+let total=cart.reduce((s,x)=>s+x.price*x.qty,0);
+
+let message=`NEW FOOD ORDER\n\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${address}\nNotes: ${notes}\n\n${items}\n\nTOTAL: ₱${total}`;
+
+// Palitan ng tunay na Facebook Messenger link
+alert("Your order is ready!\n\n"+message+
+"\n\nDemo only: Connect a real ordering service to receive this order.");
+
+});
+
+renderMenu();
+</script>
+
+</body>
+</html>
